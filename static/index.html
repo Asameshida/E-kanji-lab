@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Kanji Name</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Yuji+Syuku&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink: #ff6eb4;
+      --hot-pink: #ff2d78;
+      --cyan: #00e5ff;
+      --purple: #b24bff;
+      --yellow: #ffe600;
+      --bg: #0d0022;
+      --card-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg);
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(178, 75, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(255, 110, 180, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .petal {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--pink);
+      border-radius: 0 100% 0 100%;
+      opacity: 0.5;
+      animation: fall linear infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(-20px) rotate(0deg);   opacity: 0.6; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    header { text-align: center; margin-bottom: 50px; }
+
+    .logo-jp {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(48px, 10vw, 80px);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--pink), var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      filter: drop-shadow(0 0 20px rgba(255, 110, 180, 0.5));
+      letter-spacing: 0.05em;
+    }
+
+    .logo-en {
+      font-size: clamp(12px, 3vw, 16px);
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    .subtitle {
+      font-size: clamp(13px, 3vw, 15px);
+      color: rgba(255,255,255,0.6);
+      margin-top: 16px;
+      line-height: 1.6;
+    }
+
+    .neon-line {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--pink), var(--cyan), var(--purple), transparent);
+      margin: 24px auto;
+      max-width: 300px;
+      box-shadow: 0 0 8px var(--pink);
+    }
+
+    /* Input */
+    .input-section {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,110,180,0.3);
+      border-radius: 20px;
+      padding: 32px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(255,110,180,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+
+    .input-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 12px;
+    }
+
+    .input-wrapper { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .name-input {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(255,255,255,0.07);
+      border: 2px solid rgba(255,110,180,0.4);
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      font-size: 18px;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .name-input::placeholder { color: rgba(255,255,255,0.3); }
+    .name-input:focus { border-color: var(--pink); box-shadow: 0 0 20px rgba(255,110,180,0.3); }
+
+    .submit-btn {
+      background: linear-gradient(135deg, var(--hot-pink), var(--purple));
+      border: none;
+      border-radius: 12px;
+      padding: 14px 28px;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      box-shadow: 0 4px 20px rgba(255,45,120,0.4);
+      white-space: nowrap;
+      letter-spacing: 0.05em;
+    }
+
+    .submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,45,120,0.5); }
+    .submit-btn:active:not(:disabled) { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Loading */
+    .loading { display: none; text-align: center; padding: 40px; color: var(--pink); }
+    .loading.active { display: block; }
+
+    .spinner {
+      width: 50px; height: 50px;
+      border: 3px solid rgba(255,110,180,0.2);
+      border-top-color: var(--pink);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text { font-size: 14px; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); }
+
+    /* Results */
+    .results { display: none; margin-top: 40px; }
+    .results.active { display: block; animation: fadeIn 0.5s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .results-title {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      margin-bottom: 24px;
+    }
+
+    .name-for { text-align: center; font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .name-for span { color: var(--pink); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    /* Kanji card */
+    .kanji-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 24px 16px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .kanji-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(255,110,180,0.05));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .kanji-card:hover { transform: translateY(-6px); border-color: var(--pink); box-shadow: 0 10px 40px rgba(255,110,180,0.2); }
+    .kanji-card:hover::before { opacity: 1; }
+    .kanji-card.selected { border-color: var(--cyan); box-shadow: 0 0 30px rgba(0,229,255,0.3); }
+
+    .card-number {
+      position: absolute;
+      top: 10px; left: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.1em;
+    }
+
+    .kanji-main {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(36px, 8vw, 52px);
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 10px rgba(255,110,180,0.3));
+    }
+
+    .kanji-reading {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 14px;
+      color: var(--cyan);
+      margin-bottom: 12px;
+      letter-spacing: 0.1em;
+    }
+
+    .overall-meaning {
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.55;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    .kanji-bullets {
+      list-style: none;
+      text-align: left;
+      margin: 0 auto;
+      max-width: 220px;
+      padding: 0;
+    }
+
+    .kanji-bullets li {
+      font-size: 11.5px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.55;
+      padding: 3px 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .kanji-bullets li:first-child { border-top: none; }
+
+    .bullet-kanji { color: #fff; font-family: 'Noto Serif JP', serif; font-size: 13px; }
+    .bullet-reading { color: var(--cyan); font-size: 10.5px; }
+
+    .select-hint {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.1em;
+    }
+
+    /* Font preview section */
+    .preview-section {
+      display: none;
+      margin-top: 40px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .preview-section.active { display: block; }
+
+    .preview-title {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      margin-bottom: 8px;
+    }
+
+    .preview-selected-kanji {
+      text-align: center;
+      font-family: 'Noto Serif JP', serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--pink);
+      margin-bottom: 24px;
+      filter: drop-shadow(0 0 8px rgba(255,110,180,0.5));
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .preview-wrap {
+      border-radius: 16px;
+      overflow: hidden;
+      text-align: center;
+      padding-bottom: 16px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+
+    .preview-wrap:hover { transform: translateY(-5px); }
+
+    /* per-style theming set via inline style */
+    .preview-img {
+      width: 100%;
+      display: block;
+    }
+
+    .preview-label {
+      display: block;
+      margin-top: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+    }
+
+    .preview-sublabel {
+      display: block;
+      margin-top: 3px;
+      font-family: 'Noto Serif JP', serif;
+      font-size: 12px;
+      opacity: 0.55;
+    }
+
+    .preview-loading {
+      text-align: center;
+      padding: 32px;
+      color: rgba(255,255,255,0.4);
+      font-size: 13px;
+      letter-spacing: 0.1em;
+    }
+
+    .copy-kanji-btn {
+      display: block;
+      margin: 24px auto 0;
+      background: transparent;
+      border: 1px solid rgba(0,229,255,0.5);
+      border-radius: 100px;
+      padding: 10px 28px;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cyan);
+      cursor: pointer;
+      letter-spacing: 0.15em;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .copy-kanji-btn:hover { background: rgba(0,229,255,0.1); box-shadow: 0 0 16px rgba(0,229,255,0.2); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--purple);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 20px rgba(178,75,255,0.5);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 100;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* Error */
+    .error-msg {
+      display: none;
+      text-align: center;
+      color: #ff6b6b;
+      font-size: 14px;
+      margin-top: 16px;
+      padding: 12px;
+      background: rgba(255,107,107,0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(255,107,107,0.3);
+    }
+
+    .error-msg.active { display: block; }
+
+    .speed-lines {
+      position: fixed; top: 0; right: 0; width: 40%; height: 100%;
+      background: repeating-linear-gradient(
+        -45deg, transparent, transparent 30px,
+        rgba(255,110,180,0.02) 30px, rgba(255,110,180,0.02) 31px
+      );
+      pointer-events: none; z-index: 0;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 540px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .preview-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Trait pills */
+    .traits-section { margin-top: 24px; }
+    .trait-counter { font-size: 11px; color: rgba(255,255,255,0.4); margin-left: 8px; font-weight: 400; text-transform: none; letter-spacing: 0; }
+    .traits-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .trait-pill {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,110,180,0.3);
+      border-radius: 100px; padding: 8px 16px;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.6);
+      cursor: pointer; transition: all 0.2s; user-select: none;
+    }
+    .trait-pill:hover { border-color: var(--pink); color: #fff; background: rgba(255,110,180,0.1); }
+    .trait-pill.selected {
+      border-color: var(--cyan); color: var(--cyan);
+      background: rgba(0,229,255,0.12); box-shadow: 0 0 12px rgba(0,229,255,0.2);
+    }
+    .trait-pill.maxed:not(.selected) { opacity: 0.35; cursor: not-allowed; }
+
+    /* Style buttons */
+    .style-section { margin-top: 24px; }
+    .style-btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .style-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(178,75,255,0.3);
+      border-radius: 100px; padding: 8px 18px;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      font-size: 13px; font-weight: 700;
+      color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.2s;
+    }
+    .style-btn:hover { border-color: var(--purple); color: #fff; background: rgba(178,75,255,0.1); }
+    .style-btn.selected { border-color: var(--purple); color: var(--purple); background: rgba(178,75,255,0.15); }
+
+    /* Trait resonance on card */
+    .trait-resonance {
+      font-size: 11.5px; color: rgba(0,229,255,0.75);
+      line-height: 1.5; margin-top: 10px;
+      padding-top: 10px; border-top: 1px solid rgba(0,229,255,0.15);
+      font-style: italic; text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+<div class="speed-lines"></div>
+
+<div class="container">
+  <header>
+    <div class="logo-jp">漢字ネーム</div>
+    <div class="logo-en">Kanji Name Generator</div>
+    <div class="neon-line"></div>
+    <p class="subtitle">
+      Discover your Japanese kanji name ✦<br>
+      Enter your name, choose your traits, and receive 3 ceremonial kanji names
+    </p>
+  </header>
+
+  <div class="input-section">
+    <label class="input-label" for="nameInput">✦ Your Name (Latin letters)</label>
+    <div class="input-wrapper">
+      <input
+        type="text"
+        id="nameInput"
+        class="name-input"
+        placeholder="e.g. Emily, Alexander, Sofia..."
+        maxlength="50"
+        autocomplete="off"
+      />
+    </div>
+
+    <div class="traits-section">
+      <label class="input-label">
+        ✦ Choose Exactly 3 Traits
+        <span class="trait-counter" id="traitCounter">(0 / 3)</span>
+      </label>
+      <div class="traits-grid" id="traitsGrid"></div>
+    </div>
+
+    <div class="style-section">
+      <label class="input-label">✦ Style Preference <span style="color:rgba(255,255,255,0.3);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+      <div class="style-btns" id="styleBtns"></div>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" onclick="generateKanji()" disabled style="width:100%;margin-top:24px;">
+      Generate ✦
+    </button>
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p class="loading-text">Finding your kanji name...</p>
+  </div>
+
+  <div class="results" id="results">
+    <p class="results-title">✦ Your Kanji Name Options ✦</p>
+    <p class="name-for">Kanji names for <span id="nameDisplay"></span></p>
+    <div class="cards-grid" id="cardsGrid"></div>
+    <p class="select-hint">✦ Select an option to see font style previews ✦</p>
+  </div>
+
+  <div class="preview-section" id="previewSection">
+    <p class="preview-title">✦ Font Style Previews ✦</p>
+    <div class="preview-selected-kanji" id="previewKanjiLabel"></div>
+    <div class="preview-grid" id="previewGrid">
+      <div class="preview-loading">Rendering...</div>
+    </div>
+    <button class="copy-kanji-btn" id="copyKanjiBtn">Copy Kanji ✦</button>
+  </div>
+
+  <footer>
+    漢字ネームジェネレーター &nbsp;⋆&nbsp; Powered by Claude AI
+  </footer>
+</div>
+
+<div class="toast" id="toast">✦ Copied!</div>
+
+<script>
+  // Sakura petals
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.cssText = `left:${Math.random()*100}%;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;animation-duration:${8+Math.random()*12}s;animation-delay:${Math.random()*10}s;opacity:${0.2+Math.random()*0.4};background:${Math.random()>.5?'#ff6eb4':'#ffb3d9'};`;
+    document.body.appendChild(p);
+  }
+
+  document.getElementById('nameInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') generateKanji();
+  });
+  document.getElementById('nameInput').addEventListener('input', updateSubmitBtn);
+
+  let selectedKanji = '';
+
+  const TRAITS = ['kind','strong','intelligent','elegant','cheerful','mysterious',
+                  'free-spirited','sincere','artistic','calm','poetic','bold'];
+  const STYLES = ['elegant','cool','mystical','poetic','bright'];
+  let selectedTraits = [];
+  let selectedStyle = null;
+
+  function initInputUI() {
+    const grid = document.getElementById('traitsGrid');
+    TRAITS.forEach(t => {
+      const pill = document.createElement('button');
+      pill.className = 'trait-pill';
+      pill.textContent = t;
+      pill.dataset.trait = t;
+      pill.addEventListener('click', () => toggleTrait(t, pill));
+      grid.appendChild(pill);
+    });
+
+    const styleContainer = document.getElementById('styleBtns');
+    const noneBtn = document.createElement('button');
+    noneBtn.className = 'style-btn selected';
+    noneBtn.textContent = 'None';
+    noneBtn.dataset.style = '';
+    noneBtn.addEventListener('click', () => setStyle('', noneBtn));
+    styleContainer.appendChild(noneBtn);
+
+    STYLES.forEach(s => {
+      const btn = document.createElement('button');
+      btn.className = 'style-btn';
+      btn.textContent = s;
+      btn.dataset.style = s;
+      btn.addEventListener('click', () => setStyle(s, btn));
+      styleContainer.appendChild(btn);
+    });
+  }
+
+  function toggleTrait(trait, pill) {
+    if (selectedTraits.includes(trait)) {
+      selectedTraits = selectedTraits.filter(t => t !== trait);
+      pill.classList.remove('selected');
+    } else {
+      if (selectedTraits.length >= 3) return;
+      selectedTraits.push(trait);
+      pill.classList.add('selected');
+    }
+    document.getElementById('traitCounter').textContent = `(${selectedTraits.length} / 3)`;
+    document.querySelectorAll('.trait-pill').forEach(p => {
+      if (selectedTraits.length >= 3 && !p.classList.contains('selected')) {
+        p.classList.add('maxed');
+      } else {
+        p.classList.remove('maxed');
+      }
+    });
+    updateSubmitBtn();
+  }
+
+  function setStyle(style, btn) {
+    selectedStyle = style || null;
+    document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+
+  function updateSubmitBtn() {
+    const name = document.getElementById('nameInput').value.trim();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = !(name.length > 0 && selectedTraits.length === 3);
+  }
+
+  async function generateKanji() {
+    const nameInput = document.getElementById('nameInput');
+    const name = nameInput.value.trim();
+
+    if (!name) { showError('Please enter your name.'); return; }
+
+    const submitBtn   = document.getElementById('submitBtn');
+    const loading     = document.getElementById('loading');
+    const results     = document.getElementById('results');
+    const errorMsg    = document.getElementById('errorMsg');
+    const preview     = document.getElementById('previewSection');
+
+    errorMsg.classList.remove('active');
+    results.classList.remove('active');
+    preview.classList.remove('active');
+    loading.classList.add('active');
+    submitBtn.disabled = true;
+
+    try {
+      const body = { name, traits: selectedTraits };
+      if (selectedStyle) body.style = selectedStyle;
+      const resp = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+      displayResults(name, data.suggestions);
+    } catch (err) {
+      showError(err.message || 'Failed to generate kanji. Please try again.');
+    } finally {
+      loading.classList.remove('active');
+      updateSubmitBtn();
+    }
+  }
+
+  function displayResults(name, suggestions) {
+    document.getElementById('nameDisplay').textContent = name;
+    const grid = document.getElementById('cardsGrid');
+    grid.innerHTML = '';
+
+    const gradients = [
+      ['#ff6eb4', '#ff2d78'],
+      ['#00e5ff', '#7b2dff'],
+      ['#ffe600', '#ff6eb4'],
+    ];
+
+    suggestions.forEach((s, i) => {
+      const card = document.createElement('div');
+      card.className = 'kanji-card';
+
+      const bulletsHtml = (s.kanji_details || []).map(d => `
+        <li>
+          <span class="bullet-kanji">${d.kanji}</span>
+          <span class="bullet-reading"> (${d.reading})</span>
+          — ${d.gloss}
+        </li>
+      `).join('');
+
+      card.innerHTML = `
+        <span class="card-number">No.${i + 1}</span>
+        <div class="kanji-main" style="background:linear-gradient(135deg,#fff,${gradients[i][0]});-webkit-background-clip:text;background-clip:text;">${s.kanji}</div>
+        <div class="kanji-reading">${s.reading}</div>
+        <p class="overall-meaning">${s.overall_meaning}</p>
+        <ul class="kanji-bullets">${bulletsHtml}</ul>
+        ${s.trait_resonance ? `<p class="trait-resonance">✦ ${s.trait_resonance}</p>` : ''}
+      `;
+
+      card.addEventListener('click', () => selectKanji(s.kanji, card));
+      grid.appendChild(card);
+
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, i * 120);
+    });
+
+    document.getElementById('results').classList.add('active');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function selectKanji(kanji, card) {
+    document.querySelectorAll('.kanji-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedKanji = kanji;
+
+    const previewSection = document.getElementById('previewSection');
+    const previewGrid    = document.getElementById('previewGrid');
+    const previewLabel   = document.getElementById('previewKanjiLabel');
+
+    previewLabel.textContent = kanji;
+    previewGrid.innerHTML = '<div class="preview-loading">Rendering font previews...</div>';
+    previewSection.classList.add('active');
+    previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    document.getElementById('copyKanjiBtn').onclick = () => {
+      navigator.clipboard.writeText(kanji).then(() => showToast(`✦ ${kanji} copied!`)).catch(() => showToast(`Your kanji: ${kanji}`));
+    };
+
+    try {
+      const images = await renderVariants(kanji);
+      previewGrid.innerHTML = '';
+      images.forEach(img => {
+        const wrap = document.createElement('div');
+        wrap.className = 'preview-wrap';
+        wrap.style.cssText = `background:${img.bgColor};border:1px solid ${img.borderColor};box-shadow:0 0 28px ${img.glowColor};`;
+        wrap.innerHTML = `
+          <img src="${img.dataUrl}" alt="${img.label} style" class="preview-img" />
+          <span class="preview-label" style="color:${img.accentColor};">${img.label}</span>
+          <span class="preview-sublabel" style="color:${img.accentColor};">${img.sublabel}</span>
+        `;
+        previewGrid.appendChild(wrap);
+      });
+    } catch (e) {
+      previewGrid.innerHTML = '<div class="preview-loading">Could not render previews.</div>';
+    }
+  }
+
+  // Canvas-based font rendering — three dramatically different styles
+  async function renderVariants(kanjiString) {
+    const W = 300, H = 210;
+    const len = Math.max(kanjiString.length, 1);
+    const fontSize = Math.min(108, Math.floor((W * 0.80) / len));
+
+    const variants = [
+      // ── MINCHO: warm gold / classical Japanese ──────────────────────────
+      {
+        label: 'Mincho', sublabel: '明朝体',
+        fontFamily: "'Noto Serif JP'", weight: '900',
+        accentColor: '#d4af37',
+        bgColor: '#100800',
+        borderColor: 'rgba(212,175,55,0.55)',
+        glowColor: 'rgba(212,175,55,0.18)',
+        draw(ctx) {
+          // Warm dark background
+          const bg = ctx.createLinearGradient(0, 0, W, H);
+          bg.addColorStop(0, '#120900');
+          bg.addColorStop(1, '#0a0618');
+          ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+          // Subtle washi-paper vertical lines
+          ctx.strokeStyle = 'rgba(212,175,55,0.07)';
+          ctx.lineWidth = 1;
+          for (let x = 18; x < W; x += 18) {
+            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+          }
+
+          // Double border
+          ctx.strokeStyle = 'rgba(212,175,55,0.25)'; ctx.lineWidth = 1;
+          ctx.strokeRect(5, 5, W-10, H-10);
+          ctx.strokeStyle = 'rgba(212,175,55,0.55)'; ctx.lineWidth = 1.5;
+          ctx.strokeRect(10, 10, W-20, H-20);
+
+          // Gold corner ornaments
+          const co = 10, arm = 14;
+          ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2;
+          [[co,co],[W-co,co],[co,H-co],[W-co,H-co]].forEach(([x,y],i) => {
+            const sx = i%2===0 ? 1 : -1, sy = i<2 ? 1 : -1;
+            ctx.beginPath(); ctx.moveTo(x, y+sy*arm); ctx.lineTo(x,y); ctx.lineTo(x+sx*arm,y); ctx.stroke();
+          });
+
+          // Text: vertical gold gradient + warm glow
+          ctx.shadowColor = 'rgba(220,170,30,0.75)'; ctx.shadowBlur = 14;
+          const tg = ctx.createLinearGradient(0, H*0.15, 0, H*0.85);
+          tg.addColorStop(0, '#fff8dc'); tg.addColorStop(0.45, '#d4af37'); tg.addColorStop(1, '#f5c842');
+          return tg;
+        }
+      },
+
+      // ── GOTHIC: neon cyan / digital future ──────────────────────────────
+      {
+        label: 'Gothic', sublabel: 'ゴシック体',
+        fontFamily: "'Noto Sans JP'", weight: '900',
+        accentColor: '#00e5ff',
+        bgColor: '#010d14',
+        borderColor: 'rgba(0,229,255,0.55)',
+        glowColor: 'rgba(0,229,255,0.20)',
+        draw(ctx) {
+          ctx.fillStyle = '#010d14'; ctx.fillRect(0, 0, W, H);
+
+          // Horizontal scanlines
+          ctx.strokeStyle = 'rgba(0,229,255,0.06)'; ctx.lineWidth = 1;
+          for (let y = 0; y < H; y += 4) {
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+          }
+
+          // Outer glow border
+          ctx.strokeStyle = 'rgba(0,229,255,0.18)'; ctx.lineWidth = 1;
+          ctx.strokeRect(1, 1, W-2, H-2);
+          ctx.strokeStyle = 'rgba(0,229,255,0.55)'; ctx.lineWidth = 1.5;
+          ctx.strokeRect(8, 8, W-16, H-16);
+
+          // Cyan corner brackets (tech style)
+          const s = 18;
+          ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 2.5;
+          [[8,8,1,1],[W-8,8,-1,1],[8,H-8,1,-1],[W-8,H-8,-1,-1]].forEach(([x,y,dx,dy]) => {
+            ctx.beginPath(); ctx.moveTo(x, y+dy*s); ctx.lineTo(x,y); ctx.lineTo(x+dx*s,y); ctx.stroke();
+          });
+
+          // Tiny corner dots
+          ctx.fillStyle = '#00e5ff';
+          [[8,8],[W-8,8],[8,H-8],[W-8,H-8]].forEach(([x,y]) => {
+            ctx.beginPath(); ctx.arc(x,y,2.5,0,Math.PI*2); ctx.fill();
+          });
+
+          // Text: strong cyan neon glow
+          ctx.shadowColor = 'rgba(0,229,255,1)'; ctx.shadowBlur = 22;
+          const tg = ctx.createLinearGradient(0, H*0.1, 0, H*0.9);
+          tg.addColorStop(0, '#ffffff'); tg.addColorStop(0.5, '#00e5ff'); tg.addColorStop(1, '#ffffff');
+          return tg;
+        }
+      },
+
+      // ── BRUSH: ink red / traditional calligraphy ────────────────────────
+      {
+        label: 'Brush', sublabel: '筆文字',
+        fontFamily: "'Yuji Syuku'", weight: '400',
+        accentColor: '#ff6060',
+        bgColor: '#080003',
+        borderColor: 'rgba(200,30,30,0.55)',
+        glowColor: 'rgba(180,0,20,0.22)',
+        draw(ctx) {
+          ctx.fillStyle = '#080003'; ctx.fillRect(0, 0, W, H);
+
+          // Red radial vignette
+          const vg = ctx.createRadialGradient(W/2,H/2,H*0.15, W/2,H/2,H*0.9);
+          vg.addColorStop(0, 'rgba(0,0,0,0)');
+          vg.addColorStop(1, 'rgba(160,0,10,0.22)');
+          ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+
+          // Ink-red border
+          ctx.strokeStyle = 'rgba(200,30,30,0.35)'; ctx.lineWidth = 1;
+          ctx.strokeRect(5, 5, W-10, H-10);
+          ctx.strokeStyle = 'rgba(200,30,30,0.65)'; ctx.lineWidth = 1.5;
+          ctx.strokeRect(10, 10, W-20, H-20);
+
+          // Hanko / seal circles in corners
+          const seals = [[13,13],[W-13,13],[13,H-13],[W-13,H-13]];
+          seals.forEach(([x,y]) => {
+            ctx.strokeStyle='rgba(200,30,30,0.8)'; ctx.lineWidth=1.5;
+            ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2); ctx.stroke();
+            ctx.fillStyle='rgba(200,30,30,0.35)';
+            ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
+          });
+
+          // Text: red-white dramatic glow (ink on parchment feel)
+          ctx.shadowColor = 'rgba(220,40,40,0.85)'; ctx.shadowBlur = 20;
+          const tg = ctx.createLinearGradient(0, H*0.1, 0, H*0.9);
+          tg.addColorStop(0, '#ffffff'); tg.addColorStop(0.55, '#ffdddd'); tg.addColorStop(1, '#ff8080');
+          return tg;
+        }
+      },
+    ];
+
+    await document.fonts.ready;
+    await Promise.allSettled(
+      variants.map(v => document.fonts.load(`${v.weight} ${fontSize}px ${v.fontFamily}`))
+    );
+
+    return variants.map(v => {
+      const canvas = document.createElement('canvas');
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext('2d');
+
+      const textGradient = v.draw(ctx);   // draws background & decorations, returns text gradient
+
+      ctx.font = `${v.weight} ${fontSize}px ${v.fontFamily}`;
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle    = textGradient;
+      ctx.fillText(kanjiString, W/2, H/2 - 6);
+
+      return {
+        label: v.label,
+        sublabel: v.sublabel,
+        accentColor: v.accentColor,
+        bgColor: v.bgColor,
+        borderColor: v.borderColor,
+        glowColor: v.glowColor,
+        dataUrl: canvas.toDataURL('image/png'),
+      };
+    });
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  function showError(msg) {
+    const errorMsg = document.getElementById('errorMsg');
+    errorMsg.textContent = msg;
+    errorMsg.classList.add('active');
+  }
+
+  initInputUI();
+  updateSubmitBtn();
+</script>
+</body>
+</html>

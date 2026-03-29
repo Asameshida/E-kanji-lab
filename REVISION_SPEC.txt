@@ -1,0 +1,49 @@
+Project: Kanji Name Suggestion Site — Revision Spec
+Stack: existing Flask app in this folder (app.py, static/index.html). Keep MOCK_KANJI_API dummy mode working with the same JSON contract shape the frontend expects (update mock data accordingly).
+
+Audience & language
+- Primary users are non-Japanese visitors.
+- All UI copy must be in English (labels, buttons, errors, helper text, loading).
+- Japanese only for kanji, readings, and cultural explanations.
+
+Flow
+1) Name input
+- Visitor enters their name in Latin letters (e.g. Olivia, James, Julia).
+- Trim whitespace; reject empty input with clear English error. Max length ~50.
+
+2) Exactly 3 kanji suggestions
+- Based on the name, propose exactly three kanji-name options.
+- Phonetic alignment: relaxed; small deviations OK. Priority: initial / first-mora sound should connect well to the original name (e.g. Julia → reading like ジュリア with kanji such as 树莉愛-style fit—illustrative only).
+- Aesthetics: combinations must look natural and beautiful to Japanese natives (plausible as a name).
+- Do NOT use kanji with bad or strongly negative meanings (e.g. 悪, 苦, 死 and similar).
+
+3) Meaning explanation per suggestion (English)
+For EACH suggestion, short English text with:
+- One “Overall meaning” line (concise).
+- Bullet list per kanji: Kanji — brief gloss; optional reading in romaji in parentheses.
+
+Example structure (illustrative):
+Overall meaning: A loving person with strong values and steady growth.
+• 樹 (Ju / Ki) — tree; growth, strength, and stability
+• 理 (Ri) — reason; wisdom, order, and balance
+• 愛 (Ai) — love; kindness, warmth, and affection
+
+4) Selection → three typographic previews as IMAGES
+When user selects ONE of the three options:
+- Show three images of the SAME kanji string in:
+  (1) Mincho / serif (明朝体)
+  (2) Gothic / sans (ゴシック)
+  (3) Brush / handwritten style (筆文字風)
+- Each as an image (PNG/WebP via canvas or server render; label in English: Mincho, Gothic, Brush).
+- Readable size, consistent layout. Respect font licensing.
+
+API / data
+- If using Claude: encode rules in system prompt; return structured JSON the frontend consumes (suggestions array with kanji, reading, meaning blocks for overall + per-kanji lines, etc.).
+- Wire /api/generate and any new route (e.g. /api/render-variants) as needed.
+
+Deliverables
+- English-only visitor UI.
+- Input → 3 options meeting phonetic + aesthetic + negative-filter rules.
+- Per-option English explanation (overall + per-kanji bullets).
+- On select: three font-style images for chosen string.
+- MOCK_KANJI_API=1 still returns plausible dummy data matching the new UI.
